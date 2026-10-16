@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chess Engine — Play</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>Chess</h1>
+      <div class="controls">
+        <button id="btn-new-human">New game (2 players)</button>
+        <button id="btn-new-engine">New game vs engine</button>
+      </div>
+    </header>
+    <div class="status" id="status">Loading…</div>
+    <div class="board-wrap">
+      <div id="board" class="board" aria-label="Chess board"></div>
+    </div>
+    <aside>
+      <h2>Moves</h2>
+      <ol id="move-list"></ol>
+    </aside>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>
