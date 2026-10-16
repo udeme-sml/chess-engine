@@ -6,7 +6,8 @@ import threading
 from dataclasses import dataclass, field
 from enum import Enum
 
-from engine.api import evaluate, find_best_move
+from engine.api import evaluate
+from engine.search import find_best_move as search_best_move
 from rules.constants import Color
 from rules.fen import board_to_fen_piece_placement
 from rules.game import GameResult, game_result
@@ -28,7 +29,11 @@ class GameSession:
     ))
     human_color: Color = Color.WHITE
     engine_thinking: bool = False
+    engine_think_depth: int = 0
+    cooperative_engine: bool = False
     _engine_thread: threading.Thread | None = field(default=None, repr=False)
+    _engine_next_depth: int = field(default=0, repr=False)
+    _engine_search_pos: Position | None = field(default=None, repr=False)
     pending_engine_move: str | None = None
     move_history_uci: list[str] = field(default_factory=list)
 
@@ -39,6 +44,9 @@ class GameSession:
         self.move_history_uci.clear()
         self.pending_engine_move = None
         self.engine_thinking = False
+        self.engine_think_depth = 0
+        self._engine_next_depth = 0
+        self._engine_search_pos = None
 
     def legal_moves_uci(self) -> list[str]:
         return [move_to_uci(m) for m in generate_legal_moves(self.position)]
@@ -70,7 +78,37 @@ class GameSession:
         if game_result(self.position) != GameResult.ONGOING:
             return
         if self.position.stm != self.human_color:
-            self._start_engine_thread()
+            if self.cooperative_engine:
+                self._start_engine_cooperative()
+            else:
+                self._start_engine_thread()
+
+    def _start_engine_cooperative(self) -> None:
+        if self.engine_thinking:
+            return
+        self.engine_thinking = True
+        self._engine_search_pos = Position.from_fen(self.position.fen())
+        self._engine_next_depth = 1
+        self.engine_think_depth = 0
+
+    def engine_tick(self) -> None:
+        """Advance iterative deepening by one ply (cooperative / in-browser mode)."""
+        if not self.engine_thinking or not self.cooperative_engine:
+            return
+        if self._engine_search_pos is None or self._engine_next_depth > 4:
+            self.engine_thinking = False
+            self.engine_think_depth = 0
+            self._engine_search_pos = None
+            return
+        depth = self._engine_next_depth
+        self.engine_think_depth = depth
+        best = search_best_move(self._engine_search_pos, depth)
+        self.pending_engine_move = move_to_uci(best)
+        self._engine_next_depth += 1
+        if self._engine_next_depth > 4:
+            self.engine_thinking = False
+            self.engine_think_depth = 0
+            self._engine_search_pos = None
 
     def _start_engine_thread(self) -> None:
         if self.engine_thinking:
@@ -80,10 +118,14 @@ class GameSession:
 
         def run() -> None:
             try:
-                mv = find_best_move(pos_copy, time_limit_ms=2000, max_depth=8)
-                self.pending_engine_move = move_to_uci(mv)
+                best = None
+                for depth in range(1, 5):
+                    self.engine_think_depth = depth
+                    best = search_best_move(pos_copy, depth)
+                    self.pending_engine_move = move_to_uci(best)
             finally:
                 self.engine_thinking = False
+                self.engine_think_depth = 0
 
         self._engine_thread = threading.Thread(target=run, daemon=True)
         self._engine_thread.start()
@@ -111,6 +153,7 @@ class GameSession:
             "result": res.name if res != GameResult.ONGOING else None,
             "mode": self.mode.value,
             "engine_thinking": self.engine_thinking,
+            "engine_think_depth": self.engine_think_depth,
             "pending_engine_move": self.pending_engine_move,
             "move_history": self.move_history_uci,
         }
