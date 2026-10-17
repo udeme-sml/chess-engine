@@ -65,7 +65,9 @@ class Handler(BaseHTTPRequestHandler):
                 if SESSION.pending_engine_move and not SESSION.engine_thinking:
                     SESSION.apply_pending_engine_move()
             except (KeyError, ValueError) as e:
-                return self._send_json({"error": str(e)}, 400)
+                payload = SESSION.to_json()
+                payload["error"] = str(e)
+                return self._send_json(payload, 400)
             return self._send_json(SESSION.to_json())
         self.send_error(404)
 

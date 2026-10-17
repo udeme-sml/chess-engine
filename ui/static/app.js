@@ -25,6 +25,9 @@ function nameToIdx(name) {
 }
 
 function parsePlacement(placement) {
+  if (typeof placement !== "string") {
+    throw new TypeError("Invalid board placement from server");
+  }
   const board = Array(64).fill(null);
   let rank = 7;
   let file = 0;
@@ -126,30 +129,33 @@ async function animateMove(uci, boardBefore) {
   if (!moving) return;
 
   animating = true;
-  const hidden = new Set([fromSq, toSq]);
-  const ep = enPassantCaptureIdx(uci, boardBefore);
-  if (ep !== null) hidden.add(sqName(ep));
-  const castle = rookCastleSquares(uci, boardBefore);
-  if (castle) {
-    hidden.add(sqName(castle.from));
-    hidden.add(sqName(castle.to));
-  }
-
-  render({ hideSquares: hidden });
-
-  const promoChar = promoPieceChar(uci, moving);
-  const flights = [flyPiece(boardEl, fromSq, toSq, promoChar, MOVE_ANIM_MS)];
-  if (castle) {
-    const rook = boardBefore[castle.from];
-    if (rook) {
-      flights.push(
-        flyPiece(boardEl, sqName(castle.from), sqName(castle.to), rook, MOVE_ANIM_MS)
-      );
+  try {
+    const hidden = new Set([fromSq, toSq]);
+    const ep = enPassantCaptureIdx(uci, boardBefore);
+    if (ep !== null) hidden.add(sqName(ep));
+    const castle = rookCastleSquares(uci, boardBefore);
+    if (castle) {
+      hidden.add(sqName(castle.from));
+      hidden.add(sqName(castle.to));
     }
+
+    render({ hideSquares: hidden });
+
+    const promoChar = promoPieceChar(uci, moving);
+    const flights = [flyPiece(boardEl, fromSq, toSq, promoChar, MOVE_ANIM_MS)];
+    if (castle) {
+      const rook = boardBefore[castle.from];
+      if (rook) {
+        flights.push(
+          flyPiece(boardEl, sqName(castle.from), sqName(castle.to), rook, MOVE_ANIM_MS)
+        );
+      }
+    }
+    await Promise.all(flights);
+    boardEl.querySelectorAll(".piece-fly").forEach((n) => n.remove());
+  } finally {
+    animating = false;
   }
-  await Promise.all(flights);
-  boardEl.querySelectorAll(".piece-fly").forEach((n) => n.remove());
-  animating = false;
 }
 
 async function fetchState() {
@@ -176,10 +182,14 @@ async function newGame(mode) {
 }
 
 async function playMove(uci) {
+  if (!state?.placement) return;
   const prevPlacement = parsePlacement(state.placement);
   const next = await chessApi.playMove(uci);
   if (next.error) {
-    state = next;
+    if (next.placement) state = next;
+    const statusEl = document.getElementById("status");
+    statusEl.textContent = next.error;
+    statusEl.classList.remove("thinking");
     render();
     return;
   }

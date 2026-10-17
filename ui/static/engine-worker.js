@@ -82,7 +82,9 @@ except ValueError as e:
     err = String(e);
   }
   if (err) {
-    reply(id, true, { state: { error: err } });
+    const state = JSON.parse(sessionState());
+    state.error = err;
+    reply(id, true, { state });
     return;
   }
   reply(id, true, { state: JSON.parse(sessionState()) });
