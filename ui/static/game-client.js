@@ -1,7 +1,7 @@
 /**
  * Game API: optional local Python UI server, otherwise C# WebAssembly in a worker.
  */
-const chessApi = (() => {
+export const chessApi = (() => {
   let mode = null; // "http" | "wasm"
   let httpBase = null;
   let worker = null;
@@ -24,27 +24,39 @@ const chessApi = (() => {
     return root + p;
   }
 
+  function stateApiUrl(base) {
+    const root = base.endsWith("/") ? base : `${base}/`;
+    if (/^https?:\/\//i.test(root)) {
+      return `${root}api/state`;
+    }
+    return new URL("api/state", new URL(root, window.location.origin)).href;
+  }
+
   async function probeStateApi(base) {
     try {
-      const url = base.endsWith("/") ? `${base}api/state` : `${base}/api/state`;
-      const res = await fetch(url, { method: "GET" });
+      const res = await fetch(stateApiUrl(base), { method: "GET" });
+      if (!res.ok) return false;
       const ct = res.headers.get("content-type") || "";
-      return res.ok && ct.includes("application/json");
+      if (!ct.includes("application/json")) return false;
+      const data = await res.json();
+      return typeof data.placement === "string" && Array.isArray(data.legal_moves);
     } catch {
       return false;
     }
   }
 
   async function resolveHttpBase() {
-    if (await probeStateApi(siteRoot())) {
-      return siteRoot();
-    }
     const host = window.location.hostname;
-    if (host === "localhost" || host === "127.0.0.1") {
-      const local = "http://127.0.0.1:8765/";
-      if (await probeStateApi(local)) {
-        return local;
-      }
+    const onLocal = host === "localhost" || host === "127.0.0.1";
+
+    // Only the Python ui.server (port 8765) exposes /api/* — never probe on static hosts (e.g. GitHub Pages).
+    if (onLocal && window.location.port === "8765") {
+      const base = siteRoot();
+      if (await probeStateApi(base)) return base;
+    }
+    if (onLocal) {
+      const remote = `http://${host}:8765/`;
+      if (await probeStateApi(remote)) return remote;
     }
     return null;
   }

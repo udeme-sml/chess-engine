@@ -1,3 +1,5 @@
+import { chessApi } from "./game-client.js";
+
 const PIECES = {
   P: "♙", N: "♘", B: "♗", R: "♖", Q: "♕", K: "♔",
   p: "♟", n: "♞", b: "♝", r: "♜", q: "♛", k: "♚",
@@ -184,7 +186,15 @@ async function newGame(mode) {
 async function playMove(uci) {
   if (!state?.placement) return;
   const prevPlacement = parsePlacement(state.placement);
-  const next = await chessApi.playMove(uci);
+  let next;
+  try {
+    next = await chessApi.playMove(uci);
+  } catch (e) {
+    const statusEl = document.getElementById("status");
+    statusEl.textContent = `Move failed: ${e.message}`;
+    statusEl.classList.remove("thinking");
+    return;
+  }
   if (next.error) {
     if (next.placement) state = next;
     const statusEl = document.getElementById("status");
