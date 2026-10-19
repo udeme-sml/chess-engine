@@ -102,7 +102,7 @@ public sealed class UciEngine
                 movetime = int.Parse(args[i + 1]);
         }
         _ = movetime;
-        var mv = Search.FindBestMove(_position, depth);
+        var mv = EngineApi.FindBestMove(_position, movetime, depth);
         Console.WriteLine($"bestmove {MoveUci.ToUci(mv)}");
         Console.Out.Flush();
     }

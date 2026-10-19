@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "ChessEngine.Browser.dll",
   "resources": {
-    "hash": "sha256-mhmYzocsv883QuTTkdW7vBExGXSH2cherb+F7yoRhwQ=",
+    "hash": "sha256-GU0OkcfaQ1g9g4ibbbuPh7GH0Ajq5U/OMd0mpr2wxAE=",
     "jsModuleNative": {
       "dotnet.native.js": "sha256-7QLDBgFmIKTQH1oaWwO0nhIeD0OTKn8DCDiOOeTr9A0="
     },
@@ -9,21 +9,21 @@
       "dotnet.runtime.js": "sha256-yL6ar4vB8ArKxU/VnG/jJ1kTF7/5qO7XNmWdDU17km0="
     },
     "wasmNative": {
-      "dotnet.native.wasm": "sha256-dyop+dWUf1yF9xiuSaDiHOJBXicaalqE/ssCuj9PYc4="
+      "dotnet.native.wasm": "sha256-QiExyrP1Y0FIF0gkdjVMrm9ngSxzFALyvIrE1Xwa+oM="
     },
     "wasmSymbols": {
       "dotnet.native.js.symbols": "sha256-f7D9REZTVwbOuXUMa8rIp35UIAw80twKNwPxr6dTxXA="
     },
     "coreAssembly": {
-      "System.Private.CoreLib.wasm": "sha256-K0ipqPUasTopWFbChOfFtPSkoYqYqC1CZewGKPmyvd0=",
+      "System.Private.CoreLib.wasm": "sha256-w5mwSlIJIZVe8N1x5nl/PmRbROPAsAirYrJCcvbGLHo=",
       "System.Runtime.InteropServices.JavaScript.wasm": "sha256-ynJzPU4svDRwUyAMJxt0KU/M8i0lktUzG4DGlx6Jj3E="
     },
     "assembly": {
-      "ChessEngine.Browser.wasm": "sha256-WpCPxi1sSLWnt0jSlfgKCjTfogX0WlECDAlWB090eFo=",
-      "ChessEngine.Engine.wasm": "sha256-NmKNGp7DH9zoft3M1zpHPrjEplmJlRUNbpD35X96VKo=",
-      "ChessEngine.Rules.wasm": "sha256-M3O7UQWxIDJeMevjS5ggp/Phlbov9mgDDUHO6l5bGko=",
-      "System.Collections.Concurrent.wasm": "sha256-IeWnagMxxKzZtkRJprT9IA7pFdZC0zvfrMfoDJnBDmU=",
-      "System.Collections.wasm": "sha256-0ziG4HgxLb0Oo0vWB2KeWHVCib9GCdNTx+eRebonDGI=",
+      "ChessEngine.Browser.wasm": "sha256-JiHuC9ma9IWTU7jZvFMuER3TgfAadyWRV1GYzeTu7g8=",
+      "ChessEngine.Engine.wasm": "sha256-MQN6vdDU+Deecwp9XAw7qkmkmpEY+fvpINy6aGSpN9k=",
+      "ChessEngine.Rules.wasm": "sha256-Ae18oZQtqQaQo7qiGk2TwkVlDqRksFw8fC+0I2gv/bQ=",
+      "System.Collections.Concurrent.wasm": "sha256-2IoKEdtEPbbyeDrZGD0D67u3EJ2JIFFTr8EynnhHndk=",
+      "System.Collections.wasm": "sha256-sEKf8VrbEyZrmVguPWWhW38ExMGf4RM/HvR7d3MldpA=",
       "System.IO.Pipelines.wasm": "sha256-noaJsavSxBleXYS7Nbj5jEzNc5kSBiu5I4QuGHJXmS4=",
       "System.Linq.wasm": "sha256-7mOPKKH5pmQ+KYeF43Y1QATg9GUfpAw+27Vx+vrHP+g=",
       "System.Memory.wasm": "sha256-k1yHaor7McG+w0TpZcrEgk/sj1nYtw7rGra26CR0rfU=",

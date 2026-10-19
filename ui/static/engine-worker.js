@@ -11,6 +11,19 @@ function postProgress(message) {
   postMessage({ type: "progress", message });
 }
 
+async function loadOpeningBook(game) {
+  const bookUrl = new URL("./books/performance.bin", import.meta.url).href;
+  try {
+    const res = await fetch(bookUrl);
+    if (!res.ok) return;
+    postProgress("Loading opening book…");
+    const data = new Uint8Array(await res.arrayBuffer());
+    game.ConfigureOpeningBook(data);
+  } catch {
+    // Book optional — engine falls back to search.
+  }
+}
+
 async function ensureReady() {
   if (api) return api;
   postProgress("Downloading C# engine (first visit only — then cached)…");
@@ -19,6 +32,7 @@ async function ensureReady() {
   postProgress("Starting engine…");
   const exports = await getAssemblyExports("ChessEngine.Browser.dll");
   api = exports.ChessEngine.Browser.BrowserApi;
+  await loadOpeningBook(api);
   return api;
 }
 

@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 STATIC = ROOT / "ui" / "static"
+BOOK_SRC = ROOT / "data" / "books" / "performance.bin"
 BROWSER_PROJECT = ROOT / "chess-engine-csharp" / "src" / "ChessEngine.Browser" / "ChessEngine.Browser.csproj"
 BROWSER_BUNDLE = (
     ROOT
@@ -62,6 +63,15 @@ def main() -> None:
     for path in STATIC.iterdir():
         if path.is_file():
             shutil.copy2(path, out / path.name)
+        elif path.is_dir() and path.name != "csharp-engine":
+            shutil.copytree(path, out / path.name, dirs_exist_ok=True)
+
+    if BOOK_SRC.is_file():
+        for dest_dir in (out / "books", STATIC / "books"):
+            dest_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(BOOK_SRC, dest_dir / "performance.bin")
+    else:
+        print(f"Warning: opening book not found at {BOOK_SRC} — run scripts/fetch_performance_book.py")
 
     shutil.copytree(BROWSER_BUNDLE, out / "csharp-engine", dirs_exist_ok=True)
     (out / ".nojekyll").write_text("", encoding="utf-8")

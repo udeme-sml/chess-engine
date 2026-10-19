@@ -26,7 +26,7 @@ Pipe UCI commands on stdin (e.g. `uci`, `isready`, `position startpos`, `go dept
 | Project | Role |
 |---------|------|
 | `ChessEngine.Rules` | Board, FEN, movegen, attacks, game outcome, perft |
-| `ChessEngine.Engine` | Evaluation, negamax search, `EngineApi` |
+| `ChessEngine.Engine` | Evaluation, negamax search, `EngineApi`, Polyglot book (`Polyglot/`) |
 | `ChessEngine.Uci` | UCI console wrapper |
 | `ChessEngine.Tests` | Perft and Zobrist tests (parity with Python `tests/`) |
 
@@ -59,4 +59,4 @@ dotnet build -c Release
 dotnet publish -c Release src/ChessEngine.Browser/ChessEngine.Browser.csproj
 ```
 
-`python scripts/build_pages.py` publishes the WASM `AppBundle` into `_site/csharp-engine/`.
+`python scripts/build_pages.py` publishes the WASM `AppBundle` into `_site/csharp-engine/` and copies `data/books/performance.bin` to `_site/books/` for opening-book play in the browser.

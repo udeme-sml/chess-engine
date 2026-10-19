@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import subprocess
 import threading
 from pathlib import Path
@@ -34,6 +35,11 @@ def use_csharp_engine() -> bool:
 
 class UciClient:
     def __init__(self, dll: Path) -> None:
+        book = _REPO_ROOT / "data" / "books" / "performance.bin"
+        env = os.environ.copy()
+        if book.is_file():
+            env["CHESS_ENGINE_BOOK_PATH"] = str(book.resolve())
+
         self._proc = subprocess.Popen(
             ["dotnet", "exec", str(dll)],
             stdin=subprocess.PIPE,
@@ -41,6 +47,7 @@ class UciClient:
             stderr=subprocess.DEVNULL,
             text=True,
             bufsize=1,
+            env=env,
         )
         self._lock = threading.Lock()
         self._send("uci")
