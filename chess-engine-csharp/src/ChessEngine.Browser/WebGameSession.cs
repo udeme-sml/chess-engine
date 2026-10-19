@@ -6,7 +6,7 @@ namespace ChessEngine.Browser;
 
 internal sealed class WebGameSession
 {
-    public const int EngineSearchDepth = 6;
+    public const int EngineSearchDepth = 4;
     private const string StartFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     private string _mode = "human_human";
@@ -15,6 +15,7 @@ internal sealed class WebGameSession
     private bool _engineThinking;
     private int _engineThinkDepth;
     private string? _pendingEngineMove;
+    private bool _engineSearchStarted;
     private readonly List<string> _moveHistory = [];
 
     public void Reset(string mode)
@@ -25,6 +26,7 @@ internal sealed class WebGameSession
         _pendingEngineMove = null;
         _engineThinking = false;
         _engineThinkDepth = 0;
+        _engineSearchStarted = false;
     }
 
     public string? ApplyHumanMove(string uci)
@@ -68,10 +70,14 @@ internal sealed class WebGameSession
             return;
         _engineThinking = true;
         _engineThinkDepth = EngineSearchDepth;
+        _engineSearchStarted = false;
     }
 
     private void RunEngineSearch()
     {
+        if (_engineSearchStarted)
+            return;
+        _engineSearchStarted = true;
         var searchPos = Position.FromFen(_position.Fen());
         var best = EngineApi.FindBestMove(searchPos, 0, EngineSearchDepth);
         _pendingEngineMove = MoveUci.ToUci(best);

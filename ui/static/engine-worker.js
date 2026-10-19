@@ -7,10 +7,16 @@ function reply(id, ok, payload) {
   postMessage({ id, ok, ...payload });
 }
 
+function postProgress(message) {
+  postMessage({ type: "progress", message });
+}
+
 async function ensureReady() {
   if (api) return api;
+  postProgress("Downloading C# engine (first visit only — then cached)…");
   const configSrc = new URL("./csharp-engine/_framework/blazor.boot.json", import.meta.url).href;
   const { getAssemblyExports } = await dotnet.withConfigSrc(configSrc).create();
+  postProgress("Starting engine…");
   const exports = await getAssemblyExports("ChessEngine.Browser.dll");
   api = exports.ChessEngine.Browser.BrowserApi;
   return api;
@@ -37,19 +43,7 @@ async function handleMove(id, body) {
   const game = await ensureReady();
   const uci = body.uci || "";
   const json = game.ApplyHumanMove(uci);
-  const state = parseState(json);
-  if (!state.error) {
-    game.Tick();
-    if (parseState(game.GetState()).engine_thinking) {
-      game.Tick();
-    }
-    Object.assign(state, parseState(game.GetState()));
-    if (!state.error && state.pending_engine_move && !state.engine_thinking) {
-      game.Tick();
-      Object.assign(state, parseState(game.GetState()));
-    }
-  }
-  reply(id, true, { state });
+  reply(id, true, { state: parseState(json) });
 }
 
 onmessage = async (event) => {

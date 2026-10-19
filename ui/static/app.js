@@ -13,6 +13,11 @@ let selected = null;
 let pollTimer = null;
 let thinkUiTimer = null;
 let animating = false;
+let uiReady = false;
+
+function setBoardLoading(loading) {
+  document.querySelector(".board-wrap")?.classList.toggle("loading", loading);
+}
 
 function sqName(index) {
   const file = index % 8;
@@ -208,6 +213,16 @@ async function playMove(uci) {
   await animateMove(uci, prevPlacement);
   render();
   schedulePoll();
+  if (state.engine_thinking) {
+    await driveEngine();
+  }
+}
+
+async function driveEngine() {
+  while (state?.engine_thinking || state?.pending_engine_move) {
+    await fetchState();
+    if (!state?.engine_thinking && !state?.pending_engine_move) break;
+  }
 }
 
 function schedulePoll() {
@@ -295,7 +310,7 @@ function render(opts = {}) {
 }
 
 function onSquareClick(name, piece, legalFrom, legal) {
-  if (state.result || state.engine_thinking || animating) return;
+  if (!uiReady || state.result || state.engine_thinking || animating) return;
   if (state.mode === "human_engine") {
     const humanIsWhite = true;
     const stmWhite = state.stm === "w";
@@ -320,11 +335,17 @@ document.getElementById("btn-new-engine").addEventListener("click", () => newGam
 
 (async () => {
   const statusEl = document.getElementById("status");
-  statusEl.textContent = "Loading… (first visit downloads the C# engine)";
+  setBoardLoading(true);
+  statusEl.textContent = "Loading…";
   try {
-    await chessApi.init();
+    await chessApi.init((msg) => {
+      statusEl.textContent = msg;
+    });
     await fetchState();
+    uiReady = true;
+    setBoardLoading(false);
   } catch (e) {
     statusEl.textContent = `Failed to load: ${e.message}`;
+    setBoardLoading(false);
   }
 })();

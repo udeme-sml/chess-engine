@@ -69,7 +69,11 @@ export const chessApi = (() => {
     });
   }
 
-  function onWorkerMessage(event) {
+  function onWorkerMessage(event, onProgress) {
+    if (event.data?.type === "progress") {
+      onProgress?.(event.data.message);
+      return;
+    }
     const { id, ok, state, error } = event.data;
     const entry = pending.get(id);
     if (!entry) return;
@@ -78,21 +82,22 @@ export const chessApi = (() => {
     else entry.reject(new Error(error || "Worker error"));
   }
 
-  async function initWasmWorker() {
+  async function initWasmWorker(onProgress) {
     worker = new Worker(new URL("./engine-worker.js", import.meta.url), { type: "module" });
-    worker.addEventListener("message", onWorkerMessage);
+    worker.addEventListener("message", (event) => onWorkerMessage(event, onProgress));
     await workerCall("init");
   }
 
-  async function init() {
+  async function init(onProgress) {
     if (mode) return mode;
     const base = await resolveHttpBase();
     if (base) {
       mode = "http";
       httpBase = base;
+      onProgress?.("Connected to local Python server…");
     } else {
       mode = "wasm";
-      await initWasmWorker();
+      await initWasmWorker(onProgress);
     }
     return mode;
   }

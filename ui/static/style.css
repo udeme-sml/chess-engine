@@ -56,6 +56,15 @@ header { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: cente
 
 .board-wrap { grid-column: 1; }
 
+.board-wrap.loading {
+  cursor: wait;
+}
+
+.board-wrap.loading .board {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
 .board {
   position: relative;
   display: grid;
