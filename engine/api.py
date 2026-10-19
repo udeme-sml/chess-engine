@@ -20,7 +20,7 @@ def find_best_move(position: Position, time_limit_ms: int, max_depth: int) -> Mo
     management — the stub ignores them.
     """
     _ = time_limit_ms
-    return _find_best_move(position, min(max_depth, 2))
+    return _find_best_move(position, max_depth)
 
 
 def evaluate(position: Position) -> int:

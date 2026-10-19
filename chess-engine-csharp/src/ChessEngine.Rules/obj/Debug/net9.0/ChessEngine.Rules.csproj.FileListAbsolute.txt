@@ -1,0 +1,12 @@
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Rules\bin\Debug\net9.0\ChessEngine.Rules.deps.json
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Rules\bin\Debug\net9.0\ChessEngine.Rules.dll
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Rules\bin\Debug\net9.0\ChessEngine.Rules.pdb
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Rules\obj\Debug\net9.0\ChessEngine.Rules.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Rules\obj\Debug\net9.0\ChessEngine.Rules.AssemblyInfoInputs.cache
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Rules\obj\Debug\net9.0\ChessEngine.Rules.AssemblyInfo.cs
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Rules\obj\Debug\net9.0\ChessEngine.Rules.csproj.CoreCompileInputs.cache
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Rules\obj\Debug\net9.0\ChessEngine.Rules.sourcelink.json
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Rules\obj\Debug\net9.0\ChessEngine.Rules.dll
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Rules\obj\Debug\net9.0\refint\ChessEngine.Rules.dll
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Rules\obj\Debug\net9.0\ChessEngine.Rules.pdb
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Rules\obj\Debug\net9.0\ref\ChessEngine.Rules.dll

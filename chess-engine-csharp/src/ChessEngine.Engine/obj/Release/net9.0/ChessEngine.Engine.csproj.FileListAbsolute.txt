@@ -1,0 +1,16 @@
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\bin\Release\net9.0\ChessEngine.Engine.deps.json
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\bin\Release\net9.0\ChessEngine.Engine.dll
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\bin\Release\net9.0\ChessEngine.Engine.pdb
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\bin\Release\net9.0\ChessEngine.Rules.dll
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\bin\Release\net9.0\ChessEngine.Rules.pdb
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\obj\Release\net9.0\ChessEngine.Engine.csproj.AssemblyReference.cache
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\obj\Release\net9.0\ChessEngine.Engine.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\obj\Release\net9.0\ChessEngine.Engine.AssemblyInfoInputs.cache
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\obj\Release\net9.0\ChessEngine.Engine.AssemblyInfo.cs
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\obj\Release\net9.0\ChessEngine.Engine.csproj.CoreCompileInputs.cache
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\obj\Release\net9.0\ChessEngine.Engine.sourcelink.json
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\obj\Release\net9.0\ChessEng.6E830B67.Up2Date
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\obj\Release\net9.0\ChessEngine.Engine.dll
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\obj\Release\net9.0\refint\ChessEngine.Engine.dll
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\obj\Release\net9.0\ChessEngine.Engine.pdb
+C:\Users\udeme\chess-engine\chess-engine-csharp\src\ChessEngine.Engine\obj\Release\net9.0\ref\ChessEngine.Engine.dll

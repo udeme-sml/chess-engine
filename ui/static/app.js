@@ -233,7 +233,11 @@ function updateStatusText() {
     statusEl.classList.add("thinking");
   } else {
     const turn = state.stm === "w" ? "White" : "Black";
-    msg = `${turn} to move`;
+    const backend =
+      state.mode === "human_engine" && state.engine_backend
+        ? " · C# engine"
+        : "";
+    msg = `${turn} to move${backend}`;
     statusEl.classList.remove("thinking");
   }
   statusEl.textContent = msg;
@@ -306,7 +310,7 @@ document.getElementById("btn-new-engine").addEventListener("click", () => newGam
 
 (async () => {
   const statusEl = document.getElementById("status");
-  statusEl.textContent = "Loading… (first visit downloads the engine)";
+  statusEl.textContent = "Loading… (first visit downloads the C# engine)";
   try {
     await chessApi.init();
     await fetchState();

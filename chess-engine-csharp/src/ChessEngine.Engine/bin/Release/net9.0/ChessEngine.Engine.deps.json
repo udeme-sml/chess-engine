@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "ChessEngine.Engine/1.0.0": {
+        "dependencies": {
+          "ChessEngine.Rules": "1.0.0"
+        },
+        "runtime": {
+          "ChessEngine.Engine.dll": {}
+        }
+      },
+      "ChessEngine.Rules/1.0.0": {
+        "runtime": {
+          "ChessEngine.Rules.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ChessEngine.Engine/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ChessEngine.Rules/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

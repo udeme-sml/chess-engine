@@ -4,11 +4,15 @@ from __future__ import annotations
 
 import json
 import mimetypes
+import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
+from ui.csharp_uci import engine_backend_name
 from ui.game_session import GameSession, PlayerMode
+
+os.environ.setdefault("CHESS_ENGINE", "csharp")
 
 STATIC = Path(__file__).parent / "static"
 SESSION = GameSession()
@@ -18,10 +22,20 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, format: str, *args) -> None:  # noqa: A003
         pass
 
+    def _send_cors(self) -> None:
+        origin = self.headers.get("Origin")
+        if not origin:
+            return
+        if origin.startswith("http://127.0.0.1:") or origin.startswith("http://localhost:"):
+            self.send_header("Access-Control-Allow-Origin", origin)
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+
     def _send_json(self, data: dict, status: int = 200) -> None:
         body = json.dumps(data).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
+        self._send_cors()
         self.send_header("Content-Length", str(len(body)))
         self.end_headers()
         self.wfile.write(body)
@@ -31,6 +45,11 @@ class Handler(BaseHTTPRequestHandler):
         if length == 0:
             return {}
         return json.loads(self.rfile.read(length).decode("utf-8"))
+
+    def do_OPTIONS(self) -> None:  # noqa: N802
+        self.send_response(204)
+        self._send_cors()
+        self.end_headers()
 
     def do_GET(self) -> None:  # noqa: N802
         path = urlparse(self.path).path
@@ -76,6 +95,7 @@ def main() -> None:
     port = 8765
     server = ThreadingHTTPServer(("127.0.0.1", port), Handler)
     print(f"Chess UI: http://127.0.0.1:{port}/")
+    print(f"Vs-engine backend: {engine_backend_name()}")
     server.serve_forever()
 
 

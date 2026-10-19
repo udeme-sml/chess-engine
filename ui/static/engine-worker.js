@@ -1,101 +1,63 @@
-/* Pyodide worker — runs the Python engine for static hosting (GitHub Pages). */
-importScripts("https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js");
+/* C# engine (WebAssembly) + rules — static hosting and GitHub Pages. */
+import { dotnet } from "./csharp-engine/_framework/dotnet.js";
 
-const PYODIDE_INDEX = "https://cdn.jsdelivr.net/pyodide/v0.26.4/full/";
-
-let pyodide = null;
-let ready = false;
+let api = null;
 
 function reply(id, ok, payload) {
   postMessage({ id, ok, ...payload });
 }
 
-async function loadPythonTree() {
-  const manifest = await fetch("./python-manifest.json").then((r) => r.json());
-  for (const rel of manifest) {
-    const text = await fetch(`./python/${rel}`).then((r) => r.text());
-    const parts = rel.split("/");
-    parts.pop();
-    const dir = parts.join("/");
-    if (dir) {
-      pyodide.FS.mkdirTree(`/py/${dir}`);
-    }
-    pyodide.FS.writeFile(`/py/${rel}`, text);
-  }
-}
-
 async function ensureReady() {
-  if (ready) return;
-  pyodide = await loadPyodide({ indexURL: PYODIDE_INDEX });
-  await loadPythonTree();
-  await pyodide.runPythonAsync(`
-import sys
-sys.path.insert(0, "/py")
-from ui.game_session import GameSession, PlayerMode
-
-SESSION = GameSession(cooperative_engine=True)
-`);
-  ready = true;
+  if (api) return api;
+  const configSrc = new URL("./csharp-engine/_framework/blazor.boot.json", import.meta.url).href;
+  const { getAssemblyExports } = await dotnet.withConfigSrc(configSrc).create();
+  const exports = await getAssemblyExports("ChessEngine.Browser.dll");
+  api = exports.ChessEngine.Browser.BrowserApi;
+  return api;
 }
 
-function sessionState() {
-  return pyodide.runPython("import json; json.dumps(SESSION.to_json())");
+function parseState(json) {
+  return JSON.parse(json);
 }
 
 async function handleState(id) {
-  await pyodide.runPythonAsync(`
-if SESSION.pending_engine_move and not SESSION.engine_thinking:
-    SESSION.apply_pending_engine_move()
-elif SESSION.engine_thinking:
-    SESSION.engine_tick()
-`);
-  reply(id, true, { state: JSON.parse(sessionState()) });
+  const game = await ensureReady();
+  game.Tick();
+  reply(id, true, { state: parseState(game.GetState()) });
 }
 
 async function handleNew(id, body) {
+  const game = await ensureReady();
   const mode = body.mode || "human_human";
-  await pyodide.runPythonAsync(`
-SESSION.reset()
-SESSION.mode = PlayerMode("${mode}")
-`);
-  reply(id, true, { state: JSON.parse(sessionState()) });
+  game.NewGame(mode);
+  reply(id, true, { state: parseState(game.GetState()) });
 }
 
 async function handleMove(id, body) {
+  const game = await ensureReady();
   const uci = body.uci || "";
-  pyodide.globals.set("_uci", uci);
-  let err = null;
-  try {
-    await pyodide.runPythonAsync(`
-_err = None
-try:
-    SESSION.apply_human_move(_uci)
-    if SESSION.pending_engine_move and not SESSION.engine_thinking:
-        SESSION.apply_pending_engine_move()
-    elif SESSION.engine_thinking:
-        SESSION.engine_tick()
-except ValueError as e:
-    _err = str(e)
-`);
-    err = pyodide.globals.get("_err");
-  } catch (e) {
-    err = String(e);
+  const json = game.ApplyHumanMove(uci);
+  const state = parseState(json);
+  if (!state.error) {
+    game.Tick();
+    if (parseState(game.GetState()).engine_thinking) {
+      game.Tick();
+    }
+    Object.assign(state, parseState(game.GetState()));
+    if (!state.error && state.pending_engine_move && !state.engine_thinking) {
+      game.Tick();
+      Object.assign(state, parseState(game.GetState()));
+    }
   }
-  if (err) {
-    const state = JSON.parse(sessionState());
-    state.error = err;
-    reply(id, true, { state });
-    return;
-  }
-  reply(id, true, { state: JSON.parse(sessionState()) });
+  reply(id, true, { state });
 }
 
 onmessage = async (event) => {
   const { id, cmd, body } = event.data;
   try {
-    await ensureReady();
     if (cmd === "init") {
-      reply(id, true, { state: JSON.parse(sessionState()) });
+      const game = await ensureReady();
+      reply(id, true, { state: parseState(game.GetState()) });
       return;
     }
     if (cmd === "state") {
