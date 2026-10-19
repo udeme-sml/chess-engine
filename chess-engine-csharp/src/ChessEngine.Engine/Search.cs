@@ -15,7 +15,7 @@ public static class Search
         100, 320, 330, 500, 900, 0, // white pawn..king (type index)
     ];
 
-    public static int Negamax(Position position, int depth, int alpha, int beta)
+    public static int Negamax(Position position, int depth, int alpha, int beta, bool allowNull = true)
     {
         var alphaOrig = alpha;
         var key = position.Hash;
@@ -28,9 +28,24 @@ public static class Search
         var moves = MoveGen.GenerateLegalMoves(position);
         if (moves.Count == 0)
             return Attacks.InCheck(position) ? -MateScore : 0;
-        if (depth == 0)
+        if (depth <= 0)
             return Quiescence(position, alpha, beta);
 
+        const int NullMoveReduction = 3;
+        if (moves.Count > 1
+            && allowNull
+            && depth >= 3
+            && depth - 1 - NullMoveReduction >= 0
+            && !Attacks.InCheck(position)
+            && position.HasNonPawns())
+        {
+            position.MakeNullMove();
+            var score = -Negamax(position, depth - 1 - NullMoveReduction, -beta, -beta + 1, allowNull: false);
+            position.UnmakeNullMove();
+            if (score >= beta)
+                return beta;
+        }
+        
         OrderMoves(position, moves, hashMove);
 
         var bestScore = ScoreMin;

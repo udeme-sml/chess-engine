@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "ChessEngine.Browser.dll",
   "resources": {
-    "hash": "sha256-FlZKJHw6COZj2f8PibCHWqWdaJg6etUdfM6nUDqrxUg=",
+    "hash": "sha256-y0He+sBMtdYi9ITUKuTOrG/9l00F124dF/IubhbusH8=",
     "jsModuleNative": {
       "dotnet.native.js": "sha256-7QLDBgFmIKTQH1oaWwO0nhIeD0OTKn8DCDiOOeTr9A0="
     },
@@ -19,9 +19,9 @@
       "System.Runtime.InteropServices.JavaScript.wasm": "sha256-ynJzPU4svDRwUyAMJxt0KU/M8i0lktUzG4DGlx6Jj3E="
     },
     "assembly": {
-      "ChessEngine.Browser.wasm": "sha256-xVScz0m7lyqlNo5nnc8EZKZJ5deGLqJNZNbPJBcIJJk=",
-      "ChessEngine.Engine.wasm": "sha256-C8ZeUscsHdz4E+CIzRnbd7kR01iDtQXVq9hbzs4BqIU=",
-      "ChessEngine.Rules.wasm": "sha256-/EdW9fTOIF17cL+YQjCbjsk+ALfSS5TIkr1qtyrHfYI=",
+      "ChessEngine.Browser.wasm": "sha256-6y9iLrLHwi88qmi1EwSta95Yj+RaPp0kfjNqn3FqrRg=",
+      "ChessEngine.Engine.wasm": "sha256-e3zDiyhOmWJu7X/WGR+a7XjXjlw2ZQ8kUk/uXxLn2iQ=",
+      "ChessEngine.Rules.wasm": "sha256-DlqQMNYfp6gQAY6xgAtiLfcLRXbltCfz43pYX5uisoc=",
       "System.Collections.Concurrent.wasm": "sha256-2IoKEdtEPbbyeDrZGD0D67u3EJ2JIFFTr8EynnhHndk=",
       "System.Collections.wasm": "sha256-sEKf8VrbEyZrmVguPWWhW38ExMGf4RM/HvR7d3MldpA=",
       "System.IO.Pipelines.wasm": "sha256-noaJsavSxBleXYS7Nbj5jEzNc5kSBiu5I4QuGHJXmS4=",

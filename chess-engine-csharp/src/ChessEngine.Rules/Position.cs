@@ -72,6 +72,26 @@ public sealed class Position
 
     public int PieceAt(int sq) => Board[sq];
 
+    /// <summary>
+    /// True if <paramref name="color"/> has a knight, bishop, rook, or queen (null-move / zugzwang guard).
+    /// </summary>
+    public bool HasNonPawns(Color color)
+    {
+        for (var sq = 0; sq < 64; sq++)
+        {
+            var piece = Board[sq];
+            if (piece == 0 || ChessConstants.PieceColor(piece) != color)
+                continue;
+            var pt = ChessConstants.GetPieceType(piece);
+            if (pt is not PieceType.Pawn and not PieceType.King)
+                return true;
+        }
+
+        return false;
+    }
+
+    public bool HasNonPawns() => HasNonPawns(Stm);
+
     private int RemovePiece(int sq)
     {
         var piece = Board[sq];
@@ -228,12 +248,71 @@ public sealed class Position
         HashHistory.Add(Hash);
     }
 
+    /// <summary>Pass the turn (search-only). Pair with <see cref="UnmakeNullMove"/>.</summary>
+    public void MakeNullMove()
+    {
+        var us = Stm;
+        var undo = new UndoInfo
+        {
+            IsNullMove = true,
+            Move = Move.Null,
+            Castling = Castling,
+            EpSq = EpSq,
+            Halfmove = Halfmove,
+            Hash = Hash,
+            Fullmove = Fullmove,
+            KingSqWhite = KingSq[W],
+            KingSqBlack = KingSq[B],
+        };
+
+        var oldEp = EpSq;
+        Halfmove++;
+
+        if (oldEp >= 0)
+        {
+            Hash ^= Zobrist.HashEpFile(oldEp & 7);
+            EpSq = -1;
+        }
+
+        Hash ^= ZobristKeys.SideKey;
+        Stm = us == Color.White ? Color.Black : Color.White;
+        if (us == Color.Black)
+            Fullmove++;
+
+        UndoStack.Push(undo);
+        HashHistory.Add(Hash);
+    }
+
+    public void UnmakeNullMove()
+    {
+        if (UndoStack.Count == 0)
+            throw new InvalidOperationException("unmake_null_move: empty stack");
+
+        var undo = UndoStack.Pop();
+        if (!undo.IsNullMove)
+            throw new InvalidOperationException("unmake_null_move: top of stack is not a null move");
+
+        HashHistory.RemoveAt(HashHistory.Count - 1);
+
+        Stm = Stm == Color.White ? Color.Black : Color.White;
+        Hash = undo.Hash;
+        Castling = undo.Castling;
+        EpSq = undo.EpSq;
+        Halfmove = undo.Halfmove;
+        Fullmove = undo.Fullmove;
+        KingSq[W] = undo.KingSqWhite;
+        KingSq[B] = undo.KingSqBlack;
+    }
+
     public void UnmakeMove()
     {
         if (UndoStack.Count == 0)
             throw new InvalidOperationException("unmake_move: empty stack");
 
         var undo = UndoStack.Pop();
+        if (undo.IsNullMove)
+            throw new InvalidOperationException("unmake_move: null move on stack; use UnmakeNullMove");
+
         HashHistory.RemoveAt(HashHistory.Count - 1);
 
         var move = undo.Move;

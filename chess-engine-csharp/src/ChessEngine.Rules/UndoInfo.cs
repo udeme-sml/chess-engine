@@ -2,6 +2,7 @@ namespace ChessEngine.Rules;
 
 public sealed class UndoInfo
 {
+    public bool IsNullMove { get; init; }
     public required Move Move { get; init; }
     public int Captured { get; set; }
     public int CapturedSq { get; set; }
