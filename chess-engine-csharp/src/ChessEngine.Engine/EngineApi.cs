@@ -36,8 +36,6 @@ public static class EngineApi
 
     public static Move FindBestMove(Position position, int timeLimitMs, int maxDepth)
     {
-        _ = timeLimitMs;
-
         var book = Book;
         if (book is not null)
         {
@@ -50,7 +48,7 @@ public static class EngineApi
             }
         }
 
-        return Search.FindBestMove(position, maxDepth);
+        return Search.FindBestMove(position, maxDepth, timeLimitMs);
     }
 
     public static int Evaluate(Position position) => Eval.Evaluate(position);

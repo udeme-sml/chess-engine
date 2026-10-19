@@ -167,10 +167,10 @@ static int corlib_icall_indexes [] = {
 6621,
 6625,
 6635,
-7011,
-7032,
-7034,
-7036,
+7020,
+7041,
+7043,
+7045,
 };
 void ves_icall_System_Array_InternalCreate (int,int,int,int,int);
 int ves_icall_System_Array_GetCorElementTypeOfElementTypeInternal (int);
@@ -675,13 +675,13 @@ ves_icall_System_Diagnostics_Debugger_IsAttached_internal,
 ves_icall_System_Diagnostics_StackFrame_GetFrameInfo,
 // token 6635,
 ves_icall_System_Diagnostics_StackTrace_GetTrace,
-// token 7011,
+// token 7020,
 ves_icall_Mono_RuntimeClassHandle_GetTypeFromClass,
-// token 7032,
+// token 7041,
 ves_icall_Mono_RuntimeGPtrArrayHandle_GPtrArrayFree,
-// token 7034,
+// token 7043,
 ves_icall_Mono_SafeStringMarshal_StringToUtf8,
-// token 7036,
+// token 7045,
 ves_icall_Mono_SafeStringMarshal_GFree,
 };
 static uint8_t corlib_icall_flags [] = {

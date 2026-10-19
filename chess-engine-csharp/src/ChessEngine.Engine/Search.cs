@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using ChessEngine.Rules;
 
 namespace ChessEngine.Engine;
@@ -95,7 +96,15 @@ public static class Search
         return bestScore;
     }
 
-    public static Move FindBestMove(Position position, int depth, int alpha = ScoreMin, int beta = ScoreMax)
+    /// <summary>
+    /// Iterative deepening to <paramref name="maxDepth"/> (or until <paramref name="timeLimitMs"/> elapses).
+    /// </summary>
+    public static Move FindBestMove(
+        Position position,
+        int maxDepth,
+        int timeLimitMs = 0,
+        int alpha = ScoreMin,
+        int beta = ScoreMax)
     {
         TranspositionTable.BeginSearch();
 
@@ -104,23 +113,44 @@ public static class Search
             return Move.Null;
 
         var fenBefore = position.Fen();
-        _ = TranspositionTable.Probe(position.Hash, depth, alpha, beta, out var hashMove);
-        OrderMoves(position, moves, hashMove);
-
         var bestMove = moves[0];
-        var bestScore = ScoreMin;
-        foreach (var move in moves)
+        var bestScore = 0;
+        var stopwatch = timeLimitMs > 0 ? Stopwatch.StartNew() : null;
+
+        for (var depth = 1; depth <= maxDepth; depth++)
         {
-            position.MakeMove(move);
-            var score = -Negamax(position, depth - 1, -beta, -alpha);
-            position.UnmakeMove();
-            if (score > bestScore)
+            if (stopwatch is not null && stopwatch.ElapsedMilliseconds >= timeLimitMs && depth > 1)
+                break;
+
+            _ = TranspositionTable.Probe(position.Hash, depth, alpha, beta, out var hashMove);
+            OrderMoves(position, moves, hashMove);
+
+            var iterationBest = moves[0];
+            var iterationScore = ScoreMin;
+            var iterAlpha = alpha;
+            foreach (var move in moves)
             {
-                bestScore = score;
-                bestMove = move;
+                position.MakeMove(move);
+                var score = -Negamax(position, depth - 1, -beta, -iterAlpha);
+                position.UnmakeMove();
+                if (score > iterationScore)
+                {
+                    iterationScore = score;
+                    iterationBest = move;
+                }
+
+                if (score > iterAlpha)
+                    iterAlpha = score;
             }
-            if (score > alpha)
-                alpha = score;
+
+            bestMove = iterationBest;
+            bestScore = iterationScore;
+
+            if (Math.Abs(bestScore) >= MateScore - depth)
+                break;
+
+            if (stopwatch is not null && stopwatch.ElapsedMilliseconds >= timeLimitMs)
+                break;
         }
 
         if (position.Fen() != fenBefore)

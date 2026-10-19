@@ -49,7 +49,7 @@ def play_game(engine_a: UciProcess, engine_b: UciProcess, fen: str, max_plies: i
         eng = engine_a if ply % 2 == 0 else engine_b
         eng.send("ucinewgame")
         eng.send(f"position fen {fen} moves {' '.join(moves)}")
-        eng.send("go depth 4")
+        eng.send("go depth 6")
         line = eng.read_until("bestmove")
         token = line.split()[1]
         if token == "(none)":

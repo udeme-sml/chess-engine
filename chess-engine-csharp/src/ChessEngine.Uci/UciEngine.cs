@@ -101,7 +101,6 @@ public sealed class UciEngine
             if (args[i] == "movetime" && i + 1 < args.Length)
                 movetime = int.Parse(args[i + 1]);
         }
-        _ = movetime;
         var mv = EngineApi.FindBestMove(_position, movetime, depth);
         Console.WriteLine($"bestmove {MoveUci.ToUci(mv)}");
         Console.Out.Flush();
