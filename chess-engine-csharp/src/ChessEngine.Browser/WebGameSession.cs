@@ -94,23 +94,22 @@ internal sealed class WebGameSession
     public string ToJson(string? error = null)
     {
         var result = Game.GetResult(_position);
-        var payload = new Dictionary<string, object?>
+        var payload = new GameStateJson
         {
-            ["fen"] = _position.Fen(),
-            ["placement"] = FenCodec.BoardToPiecePlacement(_position.Board),
-            ["stm"] = _position.Stm == Color.White ? "w" : "b",
-            ["legal_moves"] = MoveGen.GenerateLegalMoves(_position).Select(MoveUci.ToUci).ToArray(),
-            ["in_check"] = Game.SideInCheck(_position),
-            ["result"] = result == GameResult.Ongoing ? null : result.ToString(),
-            ["mode"] = _mode,
-            ["engine_thinking"] = _engineThinking,
-            ["engine_think_depth"] = _engineThinkDepth,
-            ["pending_engine_move"] = _pendingEngineMove,
-            ["move_history"] = _moveHistory.ToArray(),
-            ["engine_backend"] = "csharp",
+            Fen = _position.Fen(),
+            Placement = FenCodec.BoardToPiecePlacement(_position.Board),
+            Stm = _position.Stm == Color.White ? "w" : "b",
+            LegalMoves = MoveGen.GenerateLegalMoves(_position).Select(MoveUci.ToUci).ToArray(),
+            InCheck = Game.SideInCheck(_position),
+            Result = result == GameResult.Ongoing ? null : result.ToString(),
+            Mode = _mode,
+            EngineThinking = _engineThinking,
+            EngineThinkDepth = _engineThinkDepth,
+            PendingEngineMove = _pendingEngineMove,
+            MoveHistory = _moveHistory.ToArray(),
+            EngineBackend = "csharp",
+            Error = error,
         };
-        if (error is not null)
-            payload["error"] = error;
-        return JsonSerializer.Serialize(payload);
+        return JsonSerializer.Serialize(payload, GameStateJsonContext.Default.GameStateJson);
     }
 }

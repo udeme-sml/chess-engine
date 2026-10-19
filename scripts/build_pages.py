@@ -34,11 +34,28 @@ def publish_browser_wasm() -> None:
         raise RuntimeError(f"WASM AppBundle not found at {BROWSER_BUNDLE}")
 
 
+def prepare_site_dir(out: Path) -> None:
+    if not out.exists():
+        out.mkdir(parents=True)
+        return
+    try:
+        shutil.rmtree(out)
+    except PermissionError:
+        print(
+            f"Could not remove {out} (folder in use — close any server or Explorer window using it). "
+            "Updating files in place."
+        )
+        for child in out.iterdir():
+            if child.is_dir():
+                shutil.rmtree(child, ignore_errors=True)
+            else:
+                child.unlink(missing_ok=True)
+    out.mkdir(parents=True, exist_ok=True)
+
+
 def main() -> None:
     out = Path(os.environ.get("SITE_DIR", ROOT / "_site"))
-    if out.exists():
-        shutil.rmtree(out)
-    out.mkdir(parents=True)
+    prepare_site_dir(out)
 
     publish_browser_wasm()
 

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ChessEngine.Browser")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3f65c9b60af5ee4aba9359e59226fac568945bf1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fd544a9b5ab457b68c70428d2066cc7312eb7927")]
 [assembly: System.Reflection.AssemblyProductAttribute("ChessEngine.Browser")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ChessEngine.Browser")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
