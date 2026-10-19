@@ -62,7 +62,11 @@ def play_game(engine_a: UciProcess, engine_b: UciProcess, fen: str, max_plies: i
 def main() -> None:
     if len(sys.argv) < 3:
         print("Usage: engine_match.py <engine_cmd_a...> <engine_cmd_b...>")
-        print("Example: python scripts/engine_match.py python -m engine.uci python -m engine.uci")
+        print(
+            "Example: python scripts/engine_match.py "
+            "dotnet exec chess-engine-csharp/src/ChessEngine.Uci/bin/Release/net9.0/ChessEngine.Uci.dll "
+            "dotnet exec chess-engine-csharp/src/ChessEngine.Uci/bin/Release/net9.0/ChessEngine.Uci.dll"
+        )
         sys.exit(1)
     mid = len(sys.argv) // 2
     cmd_a = sys.argv[1 : mid + 1]

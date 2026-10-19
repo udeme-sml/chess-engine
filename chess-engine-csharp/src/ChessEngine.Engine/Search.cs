@@ -62,6 +62,39 @@ public static class Search
         return bestScore;
     }
 
+    public static int Quiescence(Position position, int alpha, int beta)
+    {
+        var standPat = Eval.Evaluate(position);
+
+        if (standPat >= beta)
+            return beta;
+        if (standPat > alpha)
+            alpha = standPat;
+
+        captures = MoveGen.GenerateCaptures(position);
+        OrderMoves(position, captures, Move.Null);
+
+        if (captures.Count == 0)
+            return alpha;
+        
+        var bestScore = alpha;
+        foreach (var move in captures)
+        {
+            position.MakeMove(move);
+            var score = -Quiescence(position, -beta, -alpha);
+            position.UnmakeMove();
+
+            if (score >= bestScore)
+                bestScore = score;
+            if (score > alpha)
+                alpha = score;
+            if (alpha >= beta)
+                break;
+        }
+
+        return bestScore;
+    }
+
     public static Move FindBestMove(Position position, int depth, int alpha = ScoreMin, int beta = ScoreMax)
     {
         TranspositionTable.BeginSearch();

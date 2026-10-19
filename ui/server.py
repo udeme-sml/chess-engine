@@ -12,8 +12,6 @@ from urllib.parse import parse_qs, urlparse
 from ui.csharp_uci import engine_backend_name
 from ui.game_session import GameSession, PlayerMode
 
-os.environ.setdefault("CHESS_ENGINE", "csharp")
-
 STATIC = Path(__file__).parent / "static"
 SESSION = GameSession()
 

@@ -1,6 +1,6 @@
 # Chess Engine Implementation Reference
 
-This document describes the **current** codebase under `chess-engine`: how the board and moves are represented, what APIs exist in `rules/`, and how you plug in **search** and **evaluation** via `engine/`.
+This document describes the **current** codebase under `chess-engine`: how the board and moves are represented, what APIs exist in `rules/`, and how the **C# engine** in `chess-engine-csharp/` implements search and evaluation.
 
 ---
 
@@ -9,14 +9,14 @@ This document describes the **current** codebase under `chess-engine`: how the b
 | Package / path | Role |
 |----------------|------|
 | **`rules/`** | Rules layer: board, FEN, moves, movegen, attacks, Zobrist, perft, game outcome. **No search or eval.** |
-| **`engine/`** | Engine layer: public API + UCI. **Search/eval are stubs** (`engine/stub.py`). |
-| **`ui/`** | Web UI and `GameSession`; calls `engine.api.find_best_move`. |
+| **`chess-engine-csharp/`** | Search, eval, UCI (`ChessEngine.Uci`), and browser WASM (`ChessEngine.Browser`). |
+| **`ui/`** | Web UI and `GameSession`; vs-engine uses C# UCI locally or WASM on Pages. |
 | **`tests/`** | Perft, make/unmake, hash, rules tests. |
 | **`scripts/engine_match.py`** | Engine vs engine helper. |
 
 Python **3.11+**, no runtime dependencies (pytest optional).
 
-**Design split:** UI and UCI must only use `engine.api` for playing moves. Your search should live under `engine/` (e.g. `engine/search.py`, `engine/eval.py`) and be wired from `engine/api.py`.
+**Design split:** Python `rules/` has no search or eval. Implement and tune search under `chess-engine-csharp/src/ChessEngine.Engine/` (`EngineApi`, `Search`, eval).
 
 ---
 
@@ -260,32 +260,20 @@ Lower-level modules (`attacks`, `zobrist`, `fen`, `constants`) are imported by p
 
 ---
 
-## 14. Engine integration (where **you** implement search/eval)
+## 14. Engine integration (C#)
 
-### Public API (`engine/api.py`)
+### Public API (`chess-engine-csharp/src/ChessEngine.Engine/EngineApi.cs`)
 
-```python
-def find_best_move(position: Position, time_limit_ms: int, max_depth: int) -> Move
-def evaluate(position: Position) -> int
-```
+- **`FindBestMove`**: returns a legal move for the given FEN and depth.
+- **`Evaluate`**: centipawns from **side to move’s** perspective (positive = good for STM).
 
-- **`evaluate`**: centipawns from **side to move’s** perspective (positive = good for STM).
-- **`find_best_move`**: must return a **legal** `Move`, or `Move(0)` if none.
+### UCI (`ChessEngine.Uci`)
 
-**Current implementation:** `engine/stub.py` — random legal move, eval `0`.
-
-**Wiring:** replace imports in `api.py` to point at your modules; keep signatures.
-
-### UCI (`engine/uci.py`)
-
-- Reads `position` / `go depth` / `go movetime`.
-- Calls `find_best_move(self.position, movetime, depth)`.
-- Applies moves with `generate_legal_moves` + `move_from_uci(uci, legal)`.
-- **`stop` sets a flag but is not passed into search yet** — you’ll need shared stop flag / threading for real time management.
+- Standard UCI over stdin/stdout; used by `ui/csharp_uci.py` for local human-vs-engine.
 
 ### UI (`ui/game_session.py`)
 
-- Engine thread: `Position.from_fen(self.position.fen())` copy, then `find_best_move(pos_copy, 2000, 8)`.
+- Engine thread: sends current FEN to the C# UCI process (`best_move(fen, depth)`).
 
 ---
 
@@ -385,7 +373,7 @@ def alphabeta(pos: Position, depth: int, alpha: int, beta: int) -> int:
     return alpha
 ```
 
-Wire `evaluate` and move ordering into `engine/stub.py` (or new modules) and export through `engine/api.py`.
+Implement `evaluate` and move ordering in `chess-engine-csharp/src/ChessEngine.Engine/` and expose through `EngineApi`.
 
 ---
 
@@ -400,5 +388,5 @@ Wire `evaluate` and move ordering into `engine/stub.py` (or new modules) and exp
 | Legal moves? | **`generate_legal_moves`** |
 | Captures for QS? | **`generate_captures`** |
 | Position hash? | **`pos.hash`** (Zobrist) |
-| Engine entrypoint? | **`engine.api.find_best_move`**, **`evaluate`** |
+| Engine entrypoint? | **`ChessEngine.Engine.EngineApi`** (C# UCI / WASM) |
 | Eval sign? | **Positive = good for side to move** |

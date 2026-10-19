@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 import subprocess
 import threading
 from pathlib import Path
@@ -23,31 +22,14 @@ def find_csharp_uci_dll() -> Path | None:
     return None
 
 
-def _engine_setting() -> str:
-    return os.environ.get("CHESS_ENGINE", "csharp").strip().lower()
-
-
 def engine_backend_name() -> str:
-    if _engine_setting() == "python":
-        return "Python (in-process)"
     if find_csharp_uci_dll() is not None:
         return "C# UCI"
-    return "Python (in-process)"
+    return "C# UCI (not built)"
 
 
 def use_csharp_engine() -> bool:
-    explicit = "CHESS_ENGINE" in os.environ
-    setting = _engine_setting()
-    if setting == "python":
-        return False
-    if find_csharp_uci_dll() is not None:
-        return True
-    if explicit and setting == "csharp":
-        raise RuntimeError(
-            "CHESS_ENGINE=csharp but ChessEngine.Uci.dll not found. "
-            "Run: cd chess-engine-csharp && dotnet build -c Release"
-        )
-    return False
+    return find_csharp_uci_dll() is not None
 
 
 class UciClient:

@@ -1,6 +1,6 @@
 # Chess Engine (C#)
 
-High-performance port of the Python engine in the parent repo. Same rules layer (64-square array, packed moves, Zobrist hashing, negamax + material/PST eval) with identical perft and hash tests.
+C# search and evaluation for the parent repo. Same rules layer (64-square array, packed moves, Zobrist hashing, negamax + material/PST eval) with perft and hash tests aligned to the Python `rules/` package.
 
 ## Requirements
 
