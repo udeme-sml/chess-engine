@@ -28,7 +28,7 @@ public static class Search
         if (moves.Count == 0)
             return Attacks.InCheck(position) ? -MateScore : 0;
         if (depth == 0)
-            return Eval.Evaluate(position);
+            return Quiescence(position, alpha, beta);
 
         OrderMoves(position, moves, hashMove);
 
@@ -71,7 +71,7 @@ public static class Search
         if (standPat > alpha)
             alpha = standPat;
 
-        captures = MoveGen.GenerateCaptures(position);
+        var captures = MoveGen.GenerateCaptures(position);
         OrderMoves(position, captures, Move.Null);
 
         if (captures.Count == 0)

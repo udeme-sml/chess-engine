@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "ozIiwDc/7LU=",
+  "dgSpecHash": "ST35MhHf7rI=",
   "success": true,
   "projectFilePath": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Browser\\ChessEngine.Browser.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\udeme\\AppData\\Local\\Temp\\cursor-sandbox-cache\\eb79647796b772a920d60b8c510e641c\\nuget\\microsoft.net.illink.tasks\\9.0.20\\microsoft.net.illink.tasks.9.0.20.nupkg.sha512",
-    "C:\\Users\\udeme\\AppData\\Local\\Temp\\cursor-sandbox-cache\\eb79647796b772a920d60b8c510e641c\\nuget\\microsoft.netcore.app.ref\\9.0.21\\microsoft.netcore.app.ref.9.0.21.nupkg.sha512",
-    "C:\\Users\\udeme\\AppData\\Local\\Temp\\cursor-sandbox-cache\\eb79647796b772a920d60b8c510e641c\\nuget\\microsoft.windowsdesktop.app.ref\\9.0.20\\microsoft.windowsdesktop.app.ref.9.0.20.nupkg.sha512",
-    "C:\\Users\\udeme\\AppData\\Local\\Temp\\cursor-sandbox-cache\\eb79647796b772a920d60b8c510e641c\\nuget\\microsoft.aspnetcore.app.ref\\9.0.20\\microsoft.aspnetcore.app.ref.9.0.20.nupkg.sha512"
+    "C:\\Users\\udeme\\.nuget\\packages\\microsoft.net.illink.tasks\\9.0.20\\microsoft.net.illink.tasks.9.0.20.nupkg.sha512",
+    "C:\\Users\\udeme\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.21\\microsoft.netcore.app.ref.9.0.21.nupkg.sha512",
+    "C:\\Users\\udeme\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.20\\microsoft.windowsdesktop.app.ref.9.0.20.nupkg.sha512",
+    "C:\\Users\\udeme\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.20\\microsoft.aspnetcore.app.ref.9.0.20.nupkg.sha512"
   ],
   "logs": []
 }

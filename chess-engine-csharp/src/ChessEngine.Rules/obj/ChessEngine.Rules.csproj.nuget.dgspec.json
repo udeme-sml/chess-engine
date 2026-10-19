@@ -10,7 +10,7 @@
         "projectUniqueName": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Rules\\ChessEngine.Rules.csproj",
         "projectName": "ChessEngine.Rules",
         "projectPath": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Rules\\ChessEngine.Rules.csproj",
-        "packagesPath": "C:\\Users\\udeme\\AppData\\Local\\Temp\\cursor-sandbox-cache\\eb79647796b772a920d60b8c510e641c\\nuget",
+        "packagesPath": "C:\\Users\\udeme\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Rules\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
