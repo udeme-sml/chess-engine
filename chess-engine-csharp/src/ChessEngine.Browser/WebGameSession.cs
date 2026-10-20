@@ -6,7 +6,7 @@ namespace ChessEngine.Browser;
 
 internal sealed class WebGameSession
 {
-    public const int EngineSearchDepth = 6;
+    public const int EngineSearchDepth = 8;
     private const string StartFen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
     private string _mode = "human_human";
