@@ -10,7 +10,7 @@
         "projectUniqueName": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Engine\\ChessEngine.Engine.csproj",
         "projectName": "ChessEngine.Engine",
         "projectPath": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Engine\\ChessEngine.Engine.csproj",
-        "packagesPath": "C:\\Users\\udeme\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\udeme\\AppData\\Local\\Temp\\cursor-sandbox-cache\\98cf009d4987e3d119a1f32ca1015c41\\nuget",
         "outputPath": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Engine\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
@@ -96,7 +96,7 @@
         "projectUniqueName": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Rules\\ChessEngine.Rules.csproj",
         "projectName": "ChessEngine.Rules",
         "projectPath": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Rules\\ChessEngine.Rules.csproj",
-        "packagesPath": "C:\\Users\\udeme\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\udeme\\AppData\\Local\\Temp\\cursor-sandbox-cache\\98cf009d4987e3d119a1f32ca1015c41\\nuget",
         "outputPath": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Rules\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
@@ -178,7 +178,7 @@
         "projectUniqueName": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Uci\\ChessEngine.Uci.csproj",
         "projectName": "ChessEngine.Uci",
         "projectPath": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Uci\\ChessEngine.Uci.csproj",
-        "packagesPath": "C:\\Users\\udeme\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\udeme\\AppData\\Local\\Temp\\cursor-sandbox-cache\\98cf009d4987e3d119a1f32ca1015c41\\nuget",
         "outputPath": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Uci\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [

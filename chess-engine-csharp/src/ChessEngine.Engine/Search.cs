@@ -15,6 +15,51 @@ public static class Search
         100, 320, 330, 500, 900, 0, // white pawn..king (type index)
     ];
 
+    private const int LmrTableSize = 64;
+    private const int LmrFullDepthMoves = 4;
+    private const int LmrMinDepth = 3;
+
+    private static readonly int[,] LmrTable = BuildLmrTable();
+
+    private static int[,] BuildLmrTable()
+    {
+        var table = new int[LmrTableSize, LmrTableSize];
+        for (var depth = 1; depth < LmrTableSize; depth++)
+        {
+            for (var moveNumber = 1; moveNumber < LmrTableSize; moveNumber++)
+                table[depth, moveNumber] = (int)Math.Round(Math.Log(depth) * Math.Log(moveNumber) / 2.25);
+        }
+
+        return table;
+    }
+
+    /// <summary>
+    /// Late-move reduction in plies (0 = search at full depth). Caller searches at <c>depth - 1 - R</c>.
+    /// </summary>
+    /// <param name="moveIndex">0-based index in the ordered move list at this node.</param>
+    /// <param name="nodeInCheck">Side to move was in check at this node (before <paramref name="move"/>).</param>
+    /// <param name="givesCheck">Whether <paramref name="move"/> gives check (after make).</param>
+    public static int ComputeReduction(
+        int depth,
+        int moveIndex,
+        Move move,
+        bool nodeInCheck,
+        bool givesCheck)
+    {
+        if (depth < LmrMinDepth
+            || moveIndex < LmrFullDepthMoves
+            || move.IsCapture()
+            || move.IsPromotion()
+            || givesCheck
+            || nodeInCheck)
+            return 0;
+
+        var d = Math.Clamp(depth, 1, LmrTableSize - 1);
+        var m = Math.Clamp(moveIndex + 1, 1, LmrTableSize - 1);
+        var reduction = LmrTable[d, m];
+        return Math.Clamp(reduction, 0, depth - 1);
+    }
+
     public static int Negamax(Position position, int depth, int alpha, int beta, bool allowNull = true)
     {
         var alphaOrig = alpha;
@@ -48,13 +93,30 @@ public static class Search
         
         OrderMoves(position, moves, hashMove);
 
+        var nodeInCheck = Attacks.InCheck(position);
+        var moveIndex = 0;
         var bestScore = ScoreMin;
         Move? bestMove = null;
+
         foreach (var move in moves)
         {
             position.MakeMove(move);
-            var score = -Negamax(position, depth - 1, -beta, -alpha);
+
+            var givesCheck = Attacks.InCheck(position);
+            var reduction = ComputeReduction(depth, moveIndex, move, nodeInCheck, givesCheck);
+
+            int score;
+            if (reduction > 0)
+            {
+                score = -Negamax(position, depth - 1 - reduction, -(alpha + 1), -alpha);
+                if (score > alpha)
+                    score = -Negamax(position, depth - 1, -beta, -alpha);
+            }
+            else
+                score = -Negamax(position, depth - 1, -beta, -alpha);
+
             position.UnmakeMove();
+            moveIndex++;
 
             if (score > bestScore)
             {

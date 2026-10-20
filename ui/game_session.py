@@ -20,7 +20,7 @@ class PlayerMode(str, Enum):
     HUMAN_VS_ENGINE = "human_engine"
 
 
-ENGINE_SEARCH_DEPTH = 6
+ENGINE_SEARCH_DEPTH = 8
 
 
 @dataclass

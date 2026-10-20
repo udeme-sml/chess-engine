@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "lRi1xblsrPQ=",
+  "dgSpecHash": "x35kH/yh2rI=",
   "success": true,
   "projectFilePath": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Uci\\ChessEngine.Uci.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\udeme\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.20\\microsoft.netcore.app.ref.9.0.20.nupkg.sha512",
-    "C:\\Users\\udeme\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.20\\microsoft.windowsdesktop.app.ref.9.0.20.nupkg.sha512",
-    "C:\\Users\\udeme\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.20\\microsoft.aspnetcore.app.ref.9.0.20.nupkg.sha512",
-    "C:\\Users\\udeme\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\9.0.20\\microsoft.netcore.app.host.win-x64.9.0.20.nupkg.sha512"
+    "C:\\Users\\udeme\\AppData\\Local\\Temp\\cursor-sandbox-cache\\98cf009d4987e3d119a1f32ca1015c41\\nuget\\microsoft.netcore.app.ref\\9.0.20\\microsoft.netcore.app.ref.9.0.20.nupkg.sha512",
+    "C:\\Users\\udeme\\AppData\\Local\\Temp\\cursor-sandbox-cache\\98cf009d4987e3d119a1f32ca1015c41\\nuget\\microsoft.windowsdesktop.app.ref\\9.0.20\\microsoft.windowsdesktop.app.ref.9.0.20.nupkg.sha512",
+    "C:\\Users\\udeme\\AppData\\Local\\Temp\\cursor-sandbox-cache\\98cf009d4987e3d119a1f32ca1015c41\\nuget\\microsoft.aspnetcore.app.ref\\9.0.20\\microsoft.aspnetcore.app.ref.9.0.20.nupkg.sha512",
+    "C:\\Users\\udeme\\AppData\\Local\\Temp\\cursor-sandbox-cache\\98cf009d4987e3d119a1f32ca1015c41\\nuget\\microsoft.netcore.app.host.win-x64\\9.0.20\\microsoft.netcore.app.host.win-x64.9.0.20.nupkg.sha512"
   ],
   "logs": []
 }

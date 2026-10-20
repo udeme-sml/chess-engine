@@ -45,7 +45,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\udeme\\.nuget\\packages\\": {},
+    "C:\\Users\\udeme\\AppData\\Local\\Temp\\cursor-sandbox-cache\\98cf009d4987e3d119a1f32ca1015c41\\nuget": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
@@ -54,7 +54,7 @@
       "projectUniqueName": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Uci\\ChessEngine.Uci.csproj",
       "projectName": "ChessEngine.Uci",
       "projectPath": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Uci\\ChessEngine.Uci.csproj",
-      "packagesPath": "C:\\Users\\udeme\\.nuget\\packages\\",
+      "packagesPath": "C:\\Users\\udeme\\AppData\\Local\\Temp\\cursor-sandbox-cache\\98cf009d4987e3d119a1f32ca1015c41\\nuget",
       "outputPath": "C:\\Users\\udeme\\chess-engine\\chess-engine-csharp\\src\\ChessEngine.Uci\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [

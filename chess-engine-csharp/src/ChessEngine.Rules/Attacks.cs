@@ -112,4 +112,15 @@ public static class Attacks
         var us = them == Color.White ? Color.Black : Color.White;
         return InCheck(pos, us);
     }
+
+    /// <summary>
+    /// Whether <paramref name="move"/> gives check (opponent king attacked after the move is played).
+    /// </summary>
+    public static bool GivesCheck(Position pos, Move move)
+    {
+        pos.MakeMove(move);
+        var check = InCheck(pos);
+        pos.UnmakeMove();
+        return check;
+    }
 }
